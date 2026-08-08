@@ -1,3 +1,5 @@
+import type { Locale, Text } from "./i18n";
+
 /**
  * Een piepklein raamwerk voor de simulaties op deze site.
  *
@@ -42,20 +44,20 @@ export type Control =
   | {
       kind: "slider";
       key: string;
-      label: string;
+      label: Text;
       min: number;
       max: number;
       step: number;
       /** Herstart de simulatie bij wijziging (voor structurele parameters). */
       resets?: boolean;
-      /** Toon de waarde leesbaar, bv. als percentage. */
-      format?: (value: number) => string;
+      /** Toon de waarde leesbaar, bv. als percentage of met eenheid. */
+      format?: (value: number, locale: Locale) => string;
     }
   | {
       kind: "select";
       key: string;
-      label: string;
-      options: { value: string; label: string }[];
+      label: Text;
+      options: { value: string; label: Text }[];
       resets?: boolean;
       /** Zet meteen andere parameters, voor voorinstellingen. */
       apply?: (value: string) => Params;
@@ -63,7 +65,7 @@ export type Control =
   | {
       kind: "toggle";
       key: string;
-      label: string;
+      label: Text;
       resets?: boolean;
     };
 
@@ -74,7 +76,7 @@ export type SimSpec = {
   /** Achtergrond waarop het canvas wordt gewist. */
   background?: string;
   /** Aanwijzing bij simulaties die op muis of vinger reageren. */
-  pointerHint?: string;
+  pointerHint?: Text;
 };
 
 /* ------------------------------------------------------------------ *
@@ -173,6 +175,15 @@ export const bool = (params: Params, key: string, fallback = false): boolean => 
 
 export const clamp = (v: number, lo: number, hi: number): number =>
   v < lo ? lo : v > hi ? hi : v;
+
+/**
+ * Een getal zoals de taal het schrijft: 0,0035 in het Nederlands,
+ * 0.0035 in het Engels.
+ */
+export function decimal(value: number, locale: Locale, digits: number): string {
+  const text = value.toFixed(digits);
+  return locale === "nl" ? text.replace(".", ",") : text;
+}
 
 /** Lineaire interpolatie tussen twee kleuren in RGB. */
 export function mixRgb(

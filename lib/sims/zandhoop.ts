@@ -210,7 +210,10 @@ class Zandhoop implements Sim {
 export const zandhoopSpec: SimSpec = {
   create: () => new Zandhoop(),
   background: "#0b0c0e",
-  pointerHint: "Klik om een schep zand te storten.",
+  pointerHint: {
+    nl: "Klik om een schep zand te storten.",
+    en: "Click to tip in a shovelful of sand.",
+  },
   defaults: {
     rooster: 301,
     toevoer: 20000,
@@ -221,7 +224,7 @@ export const zandhoopSpec: SimSpec = {
     {
       kind: "slider",
       key: "rooster",
-      label: "Roostermaat",
+      label: { nl: "Roostermaat", en: "Grid size" },
       min: 101,
       max: 701,
       step: 50,
@@ -231,7 +234,7 @@ export const zandhoopSpec: SimSpec = {
     {
       kind: "slider",
       key: "toevoer",
-      label: "Korrels per seconde",
+      label: { nl: "Korrels per seconde", en: "Grains per second" },
       min: 500,
       max: 400000,
       step: 500,
@@ -239,22 +242,22 @@ export const zandhoopSpec: SimSpec = {
     {
       kind: "select",
       key: "bron",
-      label: "Bron",
+      label: { nl: "Bron", en: "Source" },
       options: [
-        { value: "midden", label: "Eén punt" },
-        { value: "regen", label: "Regen" },
+        { value: "midden", label: { nl: "Eén punt", en: "One point" } },
+        { value: "regen", label: { nl: "Regen", en: "Rain" } },
       ],
       resets: true,
     },
     {
       kind: "select",
       key: "palet",
-      label: "Palet",
+      label: { nl: "Palet", en: "Palette" },
       options: [
-        { value: "archief", label: "Archief" },
-        { value: "krijt", label: "Krijt" },
-        { value: "getij", label: "Getij" },
-        { value: "bloed", label: "Bloed" },
+        { value: "archief", label: { nl: "Archief", en: "Archive" } },
+        { value: "krijt", label: { nl: "Krijt", en: "Chalk" } },
+        { value: "getij", label: { nl: "Getij", en: "Tide" } },
+        { value: "bloed", label: { nl: "Bloed", en: "Blood" } },
       ],
     },
   ],

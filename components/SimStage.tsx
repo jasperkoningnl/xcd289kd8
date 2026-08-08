@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { dict, type Locale } from "@/lib/i18n";
 import {
   makeRandom,
   type Params,
@@ -16,13 +17,15 @@ type Props = {
   /** Verhouding breedte : hoogte van het canvas. */
   aspect?: number;
   title: string;
+  locale: Locale;
 };
 
 /**
  * Het canvas met bediening: regelt resolutie, de animatielus, pauzeren
  * buiten beeld en de knoppen. De simulaties zelf weten hier niets van.
  */
-export function SimStage({ spec, aspect = 16 / 9, title }: Props) {
+export function SimStage({ spec, aspect = 16 / 9, title, locale }: Props) {
+  const t = dict(locale);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const wrapRef = useRef<HTMLDivElement | null>(null);
 
@@ -210,7 +213,11 @@ export function SimStage({ spec, aspect = 16 / 9, title }: Props) {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const link = document.createElement("a");
-    link.download = `${title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.png`;
+    link.download = `${title
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")}.png`;
     link.href = canvas.toDataURL("image/png");
     link.click();
   }, [title]);
@@ -228,7 +235,7 @@ export function SimStage({ spec, aspect = 16 / 9, title }: Props) {
           className="stage-surface"
           style={style}
           role="img"
-          aria-label={`Simulatie: ${title}`}
+          aria-label={t.simulatieVan(title)}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
@@ -245,24 +252,29 @@ export function SimStage({ spec, aspect = 16 / 9, title }: Props) {
             onClick={() => setRunning((r) => !r)}
             aria-pressed={!running}
           >
-            {running ? "Pauze" : "Doorgaan"}
+            {running ? t.pauze : t.doorgaan}
           </button>
           <button type="button" className="btn" onClick={reset}>
-            Opnieuw
+            {t.opnieuw}
           </button>
           <button type="button" className="btn" onClick={reseed}>
-            Ander toeval
+            {t.anderToeval}
           </button>
           <button type="button" className="btn btn-ghost" onClick={download}>
-            Bewaar PNG
+            {t.bewaarPng}
           </button>
         </div>
         {spec.pointerHint ? (
-          <p className="stage-hint">{spec.pointerHint}</p>
+          <p className="stage-hint">{spec.pointerHint[locale]}</p>
         ) : null}
       </div>
 
-      <Controls controls={spec.controls} params={params} onChange={onChange} />
+      <Controls
+        controls={spec.controls}
+        params={params}
+        locale={locale}
+        onChange={onChange}
+      />
     </div>
   );
 }

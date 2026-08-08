@@ -1,6 +1,7 @@
 import {
   Noise,
   bool,
+  decimal,
   num,
   ramp,
   str,
@@ -162,7 +163,10 @@ class Stroming implements Sim {
 export const stromingSpec: SimSpec = {
   create: () => new Stroming(),
   background: "#0b0c0e",
-  pointerHint: "Klik en sleep om de stroom te verstoren.",
+  pointerHint: {
+    nl: "Klik en sleep om de stroom te verstoren.",
+    en: "Click and drag to disturb the current.",
+  },
   defaults: {
     aantal: 900,
     schaal: 0.0032,
@@ -178,7 +182,7 @@ export const stromingSpec: SimSpec = {
     {
       kind: "slider",
       key: "aantal",
-      label: "Aantal deeltjes",
+      label: { nl: "Aantal deeltjes", en: "Number of particles" },
       min: 100,
       max: 4000,
       step: 50,
@@ -187,60 +191,77 @@ export const stromingSpec: SimSpec = {
     {
       kind: "slider",
       key: "schaal",
-      label: "Schaal van het veld",
+      label: { nl: "Schaal van het veld", en: "Scale of the field" },
       min: 0.0006,
       max: 0.012,
       step: 0.0002,
-      format: (v) => v.toFixed(4),
+      format: (v, locale) => decimal(v, locale, 4),
     },
-    { kind: "slider", key: "snelheid", label: "Snelheid", min: 8, max: 160, step: 2 },
+    {
+      kind: "slider",
+      key: "snelheid",
+      label: { nl: "Snelheid", en: "Speed" },
+      min: 8,
+      max: 160,
+      step: 2,
+    },
     {
       kind: "slider",
       key: "penseel",
-      label: "Penseelbreedte",
+      label: { nl: "Penseelbreedte", en: "Brush width" },
       min: 0.3,
       max: 4,
       step: 0.1,
-      format: (v) => `${v.toFixed(1)} px`,
+      format: (v, locale) => `${decimal(v, locale, 1)} px`,
     },
     {
       kind: "slider",
       key: "levensduur",
-      label: "Levensduur",
+      label: { nl: "Levensduur", en: "Lifespan" },
       min: 30,
       max: 900,
       step: 10,
-      format: (v) => `${v} stappen`,
+      format: (v, locale) => (locale === "nl" ? `${v} stappen` : `${v} steps`),
     },
     {
       kind: "slider",
       key: "verloop",
-      label: "Verloop in de tijd",
+      label: { nl: "Verloop in de tijd", en: "Drift over time" },
       min: 0,
       max: 0.35,
       step: 0.01,
-      format: (v) => (v === 0 ? "stilstaand" : v.toFixed(2)),
+      format: (v, locale) =>
+        v === 0
+          ? locale === "nl"
+            ? "stilstaand"
+            : "static"
+          : decimal(v, locale, 2),
     },
     {
       kind: "slider",
       key: "vervaging",
-      label: "Vervaging",
+      label: { nl: "Vervaging", en: "Fade" },
       min: 0,
       max: 0.12,
       step: 0.005,
-      format: (v) => (v === 0 ? "geen" : v.toFixed(3)),
+      format: (v, locale) =>
+        v === 0 ? (locale === "nl" ? "geen" : "none") : decimal(v, locale, 3),
     },
     {
       kind: "select",
       key: "palet",
-      label: "Palet",
+      label: { nl: "Palet", en: "Palette" },
       options: [
-        { value: "as", label: "As" },
-        { value: "amber", label: "Amber" },
-        { value: "getij", label: "Getij" },
-        { value: "vuur", label: "Vuur" },
+        { value: "as", label: { nl: "As", en: "Ash" } },
+        { value: "amber", label: { nl: "Amber", en: "Amber" } },
+        { value: "getij", label: { nl: "Getij", en: "Tide" } },
+        { value: "vuur", label: { nl: "Vuur", en: "Fire" } },
       ],
     },
-    { kind: "toggle", key: "randloos", label: "Randloos vlak" },
+    {
+      kind: "toggle",
+      key: "randloos",
+      label: { nl: "Randloos vlak", en: "Wrap at the edges" },
+    },
   ],
 };

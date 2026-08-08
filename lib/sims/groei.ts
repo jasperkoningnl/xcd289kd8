@@ -1,4 +1,5 @@
 import {
+  decimal,
   num,
   str,
   type Params,
@@ -311,15 +312,15 @@ export const groeiSpec: SimSpec = {
     {
       kind: "select",
       key: "vorm",
-      label: "Vorm",
+      label: { nl: "Vorm", en: "Shape" },
       resets: true,
       options: [
-        { value: "varen", label: "Varen" },
-        { value: "boom", label: "Boom" },
-        { value: "kruid", label: "Kruid" },
-        { value: "sneeuw", label: "Sneeuwvlok" },
-        { value: "sierpinski", label: "Sierpinski" },
-        { value: "draak", label: "Drakenkromme" },
+        { value: "varen", label: { nl: "Varen", en: "Fern" } },
+        { value: "boom", label: { nl: "Boom", en: "Tree" } },
+        { value: "kruid", label: { nl: "Kruid", en: "Weed" } },
+        { value: "sneeuw", label: { nl: "Sneeuwvlok", en: "Snowflake" } },
+        { value: "sierpinski", label: { nl: "Sierpinski", en: "Sierpinski" } },
+        { value: "draak", label: { nl: "Drakenkromme", en: "Dragon curve" } },
       ],
       apply: (value) => {
         const preset = PRESETS[value] ?? PRESETS.varen;
@@ -333,7 +334,7 @@ export const groeiSpec: SimSpec = {
     {
       kind: "slider",
       key: "iteraties",
-      label: "Generaties",
+      label: { nl: "Generaties", en: "Generations" },
       min: 1,
       max: 14,
       step: 1,
@@ -342,37 +343,51 @@ export const groeiSpec: SimSpec = {
     {
       kind: "slider",
       key: "hoek",
-      label: "Draaihoek",
+      label: { nl: "Draaihoek", en: "Turn angle" },
       min: 1,
       max: 150,
       step: 0.5,
       resets: true,
-      format: (v) => `${v}°`,
+      format: (v, locale) => `${decimal(v, locale, v % 1 === 0 ? 0 : 1)}°`,
     },
     {
       kind: "slider",
       key: "korting",
-      label: "Verkorting per generatie",
+      label: { nl: "Verkorting per generatie", en: "Shrink per generation" },
       min: 0.3,
       max: 0.8,
       step: 0.01,
       resets: true,
+      format: (v, locale) => decimal(v, locale, 2),
     },
     {
       kind: "slider",
       key: "willekeur",
-      label: "Willekeur in de hoek",
+      label: { nl: "Willekeur in de hoek", en: "Jitter on the angle" },
       min: 0,
       max: 30,
       step: 0.5,
       resets: true,
-      format: (v) => (v === 0 ? "geen" : `± ${v}°`),
+      format: (v, locale) =>
+        v === 0
+          ? locale === "nl"
+            ? "geen"
+            : "none"
+          : `± ${decimal(v, locale, v % 1 === 0 ? 0 : 1)}°`,
     },
-    { kind: "slider", key: "dikte", label: "Lijndikte", min: 0.4, max: 4, step: 0.1 },
+    {
+      kind: "slider",
+      key: "dikte",
+      label: { nl: "Lijndikte", en: "Line weight" },
+      min: 0.4,
+      max: 4,
+      step: 0.1,
+      format: (v, locale) => decimal(v, locale, 1),
+    },
     {
       kind: "slider",
       key: "tempo",
-      label: "Lijnen per seconde",
+      label: { nl: "Lijnen per seconde", en: "Lines per second" },
       min: 200,
       max: 30000,
       step: 200,
@@ -380,10 +395,10 @@ export const groeiSpec: SimSpec = {
     {
       kind: "select",
       key: "kleur",
-      label: "Kleur",
+      label: { nl: "Kleur", en: "Colour" },
       options: [
-        { value: "amber", label: "Amber" },
-        { value: "krijt", label: "Krijt" },
+        { value: "amber", label: { nl: "Amber", en: "Amber" } },
+        { value: "krijt", label: { nl: "Krijt", en: "Chalk" } },
       ],
     },
   ],

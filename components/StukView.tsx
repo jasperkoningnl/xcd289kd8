@@ -1,5 +1,6 @@
 "use client";
 
+import type { Locale } from "@/lib/i18n";
 import type { SimSpec } from "@/lib/sim";
 import { groeiSpec } from "@/lib/sims/groei";
 import { patroonSpec } from "@/lib/sims/patroon";
@@ -10,9 +11,9 @@ import { zwermSpec } from "@/lib/sims/zwerm";
 import { SimStage } from "./SimStage";
 
 /**
- * De koppeling tussen een slug en zijn simulatie. Dit register moet aan de
- * clientkant staan: de specificaties bevatten functies en die kunnen niet
- * over de servergrens.
+ * De koppeling tussen de vaste `id` van een stuk en zijn simulatie. Dit
+ * register moet aan de clientkant staan: de specificaties bevatten functies
+ * en die kunnen niet over de servergrens.
  */
 const SPECS: Record<string, SimSpec> = {
   zwerm: zwermSpec,
@@ -24,15 +25,19 @@ const SPECS: Record<string, SimSpec> = {
 };
 
 export function StukView({
-  slug,
+  id,
   titel,
   aspect,
+  locale,
 }: {
-  slug: string;
+  id: string;
   titel: string;
   aspect: number;
+  locale: Locale;
 }) {
-  const spec = SPECS[slug];
+  const spec = SPECS[id];
   if (!spec) return null;
-  return <SimStage spec={spec} aspect={aspect} title={titel} />;
+  return (
+    <SimStage spec={spec} aspect={aspect} title={titel} locale={locale} />
+  );
 }

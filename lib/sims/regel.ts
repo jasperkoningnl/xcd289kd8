@@ -131,7 +131,10 @@ class Regel implements Sim {
 export const regelSpec: SimSpec = {
   create: () => new Regel(),
   background: "#0b0c0e",
-  pointerHint: "Klik om een cel in de huidige rij om te zetten.",
+  pointerHint: {
+    nl: "Klik om een cel in de huidige rij om te zetten.",
+    en: "Click to flip a cell in the current row.",
+  },
   defaults: {
     regel: 30,
     celgrootte: 3,
@@ -144,7 +147,7 @@ export const regelSpec: SimSpec = {
     {
       kind: "slider",
       key: "regel",
-      label: "Regelnummer",
+      label: { nl: "Regelnummer", en: "Rule number" },
       min: 0,
       max: 255,
       step: 1,
@@ -154,17 +157,17 @@ export const regelSpec: SimSpec = {
     {
       kind: "select",
       key: "start",
-      label: "Beginrij",
+      label: { nl: "Beginrij", en: "First row" },
       options: [
-        { value: "punt", label: "Eén cel" },
-        { value: "willekeurig", label: "Willekeurig" },
+        { value: "punt", label: { nl: "Eén cel", en: "One cell" } },
+        { value: "willekeurig", label: { nl: "Willekeurig", en: "Random" } },
       ],
       resets: true,
     },
     {
       kind: "slider",
       key: "celgrootte",
-      label: "Celgrootte",
+      label: { nl: "Celgrootte", en: "Cell size" },
       min: 1,
       max: 10,
       step: 1,
@@ -174,7 +177,7 @@ export const regelSpec: SimSpec = {
     {
       kind: "slider",
       key: "tempo",
-      label: "Rijen per seconde",
+      label: { nl: "Rijen per seconde", en: "Rows per second" },
       min: 4,
       max: 240,
       step: 4,
@@ -182,12 +185,16 @@ export const regelSpec: SimSpec = {
     {
       kind: "select",
       key: "kleur",
-      label: "Kleur",
+      label: { nl: "Kleur", en: "Colour" },
       options: [
-        { value: "warm", label: "Amber" },
-        { value: "krijt", label: "Krijt" },
+        { value: "warm", label: { nl: "Amber", en: "Amber" } },
+        { value: "krijt", label: { nl: "Krijt", en: "Chalk" } },
       ],
     },
-    { kind: "toggle", key: "raster", label: "Rasterlijnen" },
+    {
+      kind: "toggle",
+      key: "raster",
+      label: { nl: "Rasterlijnen", en: "Grid lines" },
+    },
   ],
 };
