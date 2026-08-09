@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { AudioBus } from "@/lib/audio";
 import { dict, type Locale } from "@/lib/i18n";
 import {
   makeRandom,
@@ -10,6 +11,7 @@ import {
   type SimSpec,
   type Stage,
 } from "@/lib/sim";
+import { leesParams, schrijfParams } from "@/lib/deelbaar";
 import { Controls } from "./Controls";
 
 type Props = {
@@ -22,7 +24,8 @@ type Props = {
 
 /**
  * Het canvas met bediening: regelt resolutie, de animatielus, pauzeren
- * buiten beeld en de knoppen. De simulaties zelf weten hier niets van.
+ * buiten beeld, het geluid en de deelbare adresbalk. De simulaties zelf
+ * weten hier niets van.
  */
 export function SimStage({ spec, aspect = 16 / 9, title, locale }: Props) {
   const t = dict(locale);
@@ -36,10 +39,13 @@ export function SimStage({ spec, aspect = 16 / 9, title, locale }: Props) {
   const frameRef = useRef<number | null>(null);
   const lastRef = useRef<number>(0);
   const seedRef = useRef<number>(1);
+  const busRef = useRef<AudioBus | null>(null);
 
   const [params, setParams] = useState<Params>(spec.defaults);
   const [running, setRunning] = useState(true);
   const [visible, setVisible] = useState(false);
+  const [soundOn, setSoundOn] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   paramsRef.current = params;
 
@@ -73,6 +79,7 @@ export function SimStage({ spec, aspect = 16 / 9, title, locale }: Props) {
       height,
       dpr,
       random: makeRandom(seedRef.current),
+      audio: busRef.current,
     };
     stageRef.current = stage;
 
@@ -91,8 +98,19 @@ export function SimStage({ spec, aspect = 16 / 9, title, locale }: Props) {
     build();
   }, [build]);
 
-  // Opbouwen zodra het canvas er is, en opnieuw bij formaatwijziging.
+  // Parameters uit de adresbalk overnemen voordat er iets gebouwd wordt.
+  const startParams = useRef<Params | null>(null);
+  if (startParams.current === null && typeof window !== "undefined") {
+    const uitUrl = leesParams(spec, window.location.search);
+    startParams.current = { ...spec.defaults, ...uitUrl };
+  }
+
   useEffect(() => {
+    const start = startParams.current;
+    if (start && Object.keys(start).length > 0) {
+      paramsRef.current = start;
+      setParams(start);
+    }
     build();
 
     const wrap = wrapRef.current;
@@ -157,12 +175,55 @@ export function SimStage({ spec, aspect = 16 / 9, title, locale }: Props) {
     };
   }, [visible, running]);
 
+  /* ---------------------------------------------------------------- *
+   * Geluid
+   * ---------------------------------------------------------------- */
+
+  const toggleSound = useCallback(async () => {
+    if (!spec.audio) return;
+
+    if (soundOn) {
+      await busRef.current?.suspend();
+      setSoundOn(false);
+      return;
+    }
+
+    // De AudioContext mag pas na een klik ontstaan; browsers weigeren het
+    // anders. Daarom wordt hij hier gemaakt en niet bij het opbouwen.
+    if (!busRef.current) {
+      busRef.current = new AudioBus();
+      if (stageRef.current) stageRef.current.audio = busRef.current;
+    }
+    await busRef.current.resume();
+    setSoundOn(true);
+  }, [soundOn, spec.audio]);
+
+  // Zwijgen zodra het stuk gepauzeerd of uit beeld is.
+  useEffect(() => {
+    const bus = busRef.current;
+    if (!bus || !soundOn) return;
+    if (running && visible) void bus.resume();
+    else void bus.suspend();
+  }, [running, visible, soundOn]);
+
+  useEffect(() => {
+    return () => {
+      busRef.current?.close();
+      busRef.current = null;
+    };
+  }, []);
+
+  /* ---------------------------------------------------------------- *
+   * Bediening
+   * ---------------------------------------------------------------- */
+
   /** Zet een parameter; structurele wijzigingen starten opnieuw. */
   const onChange = useCallback(
     (patch: Params, resets: boolean) => {
       setParams((prev) => {
         const next = { ...prev, ...patch };
         paramsRef.current = next;
+        schrijfParams(spec, next);
         return next;
       });
       if (resets) {
@@ -170,7 +231,7 @@ export function SimStage({ spec, aspect = 16 / 9, title, locale }: Props) {
         requestAnimationFrame(() => build());
       }
     },
-    [build],
+    [build, spec],
   );
 
   const pointerFromEvent = useCallback(
@@ -216,11 +277,22 @@ export function SimStage({ spec, aspect = 16 / 9, title, locale }: Props) {
     link.download = `${title
       .toLowerCase()
       .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[̀-ͯ]/g, "")
       .replace(/[^a-z0-9]+/g, "-")}.png`;
     link.href = canvas.toDataURL("image/png");
     link.click();
   }, [title]);
+
+  const copyLink = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      // Zonder toestemming voor het klembord valt er weinig te doen; het
+      // adres staat al in de balk.
+    }
+  }, []);
 
   const style = useMemo(
     () => ({ background: spec.background ?? "#0b0c0e" }),
@@ -254,11 +326,24 @@ export function SimStage({ spec, aspect = 16 / 9, title, locale }: Props) {
           >
             {running ? t.pauze : t.doorgaan}
           </button>
+          {spec.audio ? (
+            <button
+              type="button"
+              className={soundOn ? "btn btn-actief" : "btn"}
+              onClick={() => void toggleSound()}
+              aria-pressed={soundOn}
+            >
+              {soundOn ? t.geluidUit : t.geluidAan}
+            </button>
+          ) : null}
           <button type="button" className="btn" onClick={reset}>
             {t.opnieuw}
           </button>
           <button type="button" className="btn" onClick={reseed}>
             {t.anderToeval}
+          </button>
+          <button type="button" className="btn btn-ghost" onClick={() => void copyLink()}>
+            {copied ? t.linkGekopieerd : t.kopieerLink}
           </button>
           <button type="button" className="btn btn-ghost" onClick={download}>
             {t.bewaarPng}
@@ -268,6 +353,10 @@ export function SimStage({ spec, aspect = 16 / 9, title, locale }: Props) {
           <p className="stage-hint">{spec.pointerHint[locale]}</p>
         ) : null}
       </div>
+
+      {spec.audio && !soundOn ? (
+        <p className="stage-klank">{t.klankUitleg}</p>
+      ) : null}
 
       <Controls
         controls={spec.controls}

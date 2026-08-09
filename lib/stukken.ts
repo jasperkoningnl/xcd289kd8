@@ -26,10 +26,14 @@ export type StukTekst = {
   probeer: { titel: string; tekst: string }[];
 };
 
+export type Soort = "beeld" | "klank";
+
 export type Stuk = {
   /** Vaste sleutel, ook gebruikt door het simulatieregister. */
   id: string;
   slug: Text;
+  /** Bepaalt onder welke kop het stuk in de index staat. */
+  soort: Soort;
   /** Verhouding breedte : hoogte van het canvas. */
   aspect: number;
   tekst: Record<Locale, StukTekst>;
@@ -38,6 +42,7 @@ export type Stuk = {
 export const STUKKEN: Stuk[] = [
   {
     id: "zwerm",
+    soort: "beeld",
     slug: { nl: "zwerm", en: "flock" },
     aspect: 16 / 9,
     tekst: {
@@ -117,6 +122,7 @@ export const STUKKEN: Stuk[] = [
   },
   {
     id: "patroon",
+    soort: "beeld",
     slug: { nl: "patroon", en: "pattern" },
     aspect: 16 / 10,
     tekst: {
@@ -194,6 +200,7 @@ export const STUKKEN: Stuk[] = [
   },
   {
     id: "regel",
+    soort: "beeld",
     slug: { nl: "regel", en: "rule" },
     aspect: 3 / 2,
     tekst: {
@@ -273,6 +280,7 @@ export const STUKKEN: Stuk[] = [
   },
   {
     id: "stroming",
+    soort: "beeld",
     slug: { nl: "stroming", en: "flow" },
     aspect: 3 / 2,
     tekst: {
@@ -352,6 +360,7 @@ export const STUKKEN: Stuk[] = [
   },
   {
     id: "groei",
+    soort: "beeld",
     slug: { nl: "groei", en: "growth" },
     aspect: 4 / 3,
     tekst: {
@@ -431,6 +440,7 @@ export const STUKKEN: Stuk[] = [
   },
   {
     id: "zandhoop",
+    soort: "beeld",
     slug: { nl: "zandhoop", en: "sandpile" },
     aspect: 1,
     tekst: {
@@ -508,6 +518,162 @@ export const STUKKEN: Stuk[] = [
       },
     },
   },
+  {
+    id: "synchronie",
+    soort: "klank",
+    slug: { nl: "synchronie", en: "synchrony" },
+    aspect: 16 / 10,
+    tekst: {
+      nl: {
+        titel: "Synchronie",
+        kicker: "Maat",
+        herkomst: "Yoshiki Kuramoto, 1975",
+        samenvatting:
+          "Honderd klokjes die elk hun eigen tempo hebben en elkaar een duwtje geven. Binnen een minuut lopen ze gelijk.",
+        regel: [
+          "Loop rond op je eigen tempo.",
+          "Kijk hoe de groep als geheel loopt.",
+          "Schuif je eigen fase een klein beetje die kant op.",
+        ],
+        alineas: [
+          "In de mangrovebossen van Zuidoost-Azië zitten vuurvliegjes met duizenden in dezelfde boom, en ze knipperen gelijk. Hele oevers tegelijk, aan en uit, minutenlang. Negentiende-eeuwse reizigers die het beschreven werden niet geloofd; men hield het op een fout van het oog van de waarnemer.",
+          "Yoshiki Kuramoto schreef in 1975 op wat ervoor nodig is, en het is bedroevend weinig. Elke oscillator heeft zijn eigen natuurlijke tempo — de een is sneller dan de ander, en dat verandert niet. Het enige wat ze doen is hun fase een fractie verschuiven in de richting van het gemiddelde. Geen leider, geen afspraak, geen signaal dat zegt *nu*.",
+          "Wat je hierboven ziet is dat die verschuiving niet geleidelijk werkt. Zet de koppeling laag en er gebeurt helemaal niets: het blijft rommelen, hoe lang je ook wacht. Draai hem langzaam op en er is een punt waarop de boel binnen enkele seconden dichtklapt. Onder die drempel: nul. Erboven: alles. Dat is geen kwestie van geduld maar van een echte omslag.",
+          "De pijl in de cirkel onderaan is de maat waarin dat wordt uitgedrukt. Elk stipje op de cirkel is één oscillator; als ze gelijkmatig verspreid staan wijst de pijl nergens heen en is r nul. Klonteren ze samen, dan groeit de pijl naar één. Diezelfde wiskunde beschrijft metronomen op een rollende plank, het klappen van een publiek dat in de maat valt, en de cellen die je hartslag op gang houden.",
+        ],
+        probeer: [
+          {
+            titel: "Koppeling langzaam opdraaien",
+            tekst:
+              "Zoek het punt waarop het kantelt. Het ligt hoger naarmate de spreiding in tempo groter is — meer onenigheid vraagt meer koppeling.",
+          },
+          {
+            titel: "Spreiding op nul",
+            tekst:
+              "Nu heeft iedereen hetzelfde eigen tempo. Er is geen koppeling meer nodig; ze liepen al gelijk, alleen niet in fase.",
+          },
+          {
+            titel: "Zet het geluid aan en luister",
+            tekst:
+              "Ongelijk klinkt het als regen op een dak. Gelijk wordt het één akkoord. De overgang hoor je eerder dan je hem ziet.",
+          },
+        ],
+      },
+      en: {
+        titel: "Synchrony",
+        kicker: "Time",
+        herkomst: "Yoshiki Kuramoto, 1975",
+        samenvatting:
+          "A hundred little clocks, each at its own tempo, each nudging the others. Within a minute they run as one.",
+        regel: [
+          "Run at your own tempo.",
+          "Look at how the group as a whole is running.",
+          "Shift your own phase a little in that direction.",
+        ],
+        alineas: [
+          "In the mangrove forests of Southeast Asia, fireflies gather by the thousand in a single tree and flash in unison. Whole riverbanks at a time, on and off, for minutes on end. Nineteenth-century travellers who described it were not believed; the effect was put down to a fault in the observer's eye.",
+          "In 1975 Yoshiki Kuramoto wrote down what it takes, and it is dispiritingly little. Every oscillator has its own natural tempo — some faster than others, and that never changes. All they do is shift their phase a fraction towards the average. No leader, no agreement, no signal that says *now*.",
+          "What you see above is that this shift does not work gradually. Set the coupling low and nothing whatsoever happens: it keeps milling about, however long you wait. Turn it up slowly and there is a point at which the whole thing snaps shut within seconds. Below that threshold: nothing. Above it: everything. That is not a matter of patience but a genuine transition.",
+          "The arrow in the circle below is the measure of it. Each dot on the circle is one oscillator; when they are evenly spread the arrow points nowhere and r is zero. As they clump, the arrow grows towards one. The same mathematics describes metronomes on a rolling platform, an audience falling into rhythmic applause, and the cells that keep your heart beating.",
+        ],
+        probeer: [
+          {
+            titel: "Raise the coupling slowly",
+            tekst:
+              "Find the point where it tips. It sits higher the wider the spread in tempo — more disagreement demands more coupling.",
+          },
+          {
+            titel: "Spread at zero",
+            tekst:
+              "Now everyone shares the same natural tempo. No coupling is needed; they were already running at the same rate, just not in phase.",
+          },
+          {
+            titel: "Turn the sound on and listen",
+            tekst:
+              "Out of step it sounds like rain on a roof. In step it becomes a single chord. You hear the transition before you see it.",
+          },
+        ],
+      },
+    },
+  },
+  {
+    id: "ritme",
+    soort: "klank",
+    slug: { nl: "ritme", en: "rhythm" },
+    aspect: 4 / 3,
+    tekst: {
+      nl: {
+        titel: "Ritme",
+        kicker: "Verdeling",
+        herkomst: "Bjorklund, 1999 · Toussaint, 2005",
+        samenvatting:
+          "Verdeel k tikken zo gelijkmatig mogelijk over n stappen, en er komt een ritme uit dat al eeuwen bestaat.",
+        regel: [
+          "Neem n stappen en k tikken.",
+          "Verdeel die tikken zo gelijkmatig mogelijk over de stappen.",
+          "Dat is alles. Er is precies één zo'n verdeling.",
+        ],
+        alineas: [
+          "Dit stuk heeft de kortste regel van de hele site, en misschien wel de grootste verrassing. De opgave is niet muzikaal bedoeld: verdeel k dingen zo gelijkmatig mogelijk over n plekken. Het algoritme dat het oplost is een verkapte versie van Euclides' methode voor de grootste gemene deler, en het is opgeschreven door E. Bjorklund voor de timing van pulsen in een deeltjesversneller. Geen noot in zicht.",
+          "In 2005 merkte Godfried Toussaint op dat de uitkomsten niet zomaar ritmes zijn, maar in opvallend veel gevallen ritmes die ergens ter wereld al generaties worden gespeeld. E(3,8) — drie tikken over acht stappen — geeft `x · · x · · x ·`, de Cubaanse tresillo, en datzelfde patroon duikt op van West-Afrika tot Zuid-Amerika. E(5,8) geeft de cinquillo. E(7,16), E(4,7), E(5,12): het lijstje loopt door.",
+          "Wat dat betekent, is dat een groot deel van de traditionele ritmiek van de wereld wordt gevonden door één abstracte eis, zonder dat iemand die eis ooit heeft gesteld. Trommelaars zijn niet op zoek gegaan naar de gelijkmatigste verdeling. Ze zijn op zoek gegaan naar wat goed voelt, en generaties lang bleef hangen wat bleef hangen. Dat de wiskunde en de overlevering op dezelfde plek uitkomen is geen bewijs dat het ene het andere verklaart — maar het is ook moeilijk toeval te noemen.",
+          "De drie ringen hierboven draaien onafhankelijk. Interessant wordt het waar hun lengtes niet in elkaar passen: zet een spoor op 8 stappen en een ander op 7, en het duurt 56 stappen voor de combinatie zich herhaalt. Dat is dezelfde bron van rijkdom als bij de faseverschuiving van Steve Reich — twee eenvoudige dingen die net niet gelijk lopen.",
+        ],
+        probeer: [
+          {
+            titel: "Draai k van 1 naar 8 bij n = 8",
+            tekst:
+              "Bij elke waarde springt er een ander bekend ritme tevoorschijn. Niets ertussenin is willekeurig; er is telkens precies één gelijkmatigste verdeling.",
+          },
+          {
+            titel: "Zet spoor 2 op zeven stappen",
+            tekst:
+              "Zeven tegen acht loopt pas na 56 stappen weer gelijk. Wat je hoort verandert een minuut lang, terwijl er niets aan de regels verandert.",
+          },
+          {
+            titel: "Gebruik de draai",
+            tekst:
+              "Hetzelfde patroon, alleen een andere startplek. Ritmisch is dat een compleet ander gevoel — dezelfde verzameling tikken, een andere muziek.",
+          },
+        ],
+      },
+      en: {
+        titel: "Rhythm",
+        kicker: "Distribution",
+        herkomst: "Bjorklund, 1999 · Toussaint, 2005",
+        samenvatting:
+          "Spread k onsets as evenly as possible over n steps, and out comes a rhythm that has existed for centuries.",
+        regel: [
+          "Take n steps and k onsets.",
+          "Spread those onsets as evenly as possible across the steps.",
+          "That is all. There is exactly one such distribution.",
+        ],
+        alineas: [
+          "This piece has the shortest rule on the site and perhaps the largest surprise. The problem is not meant musically at all: distribute k things as evenly as possible over n places. The algorithm that solves it is a thinly disguised version of Euclid's method for the greatest common divisor, and it was written down by E. Bjorklund for the timing of pulses in a particle accelerator. Not a note in sight.",
+          "In 2005 Godfried Toussaint observed that the results are not merely rhythms, but in a striking number of cases rhythms that have been played somewhere in the world for generations. E(3,8) — three onsets across eight steps — gives `x · · x · · x ·`, the Cuban tresillo, and that same pattern turns up from West Africa to South America. E(5,8) gives the cinquillo. E(7,16), E(4,7), E(5,12): the list goes on.",
+          "What that means is that a large part of the world's traditional rhythm is found by a single abstract requirement that nobody ever set. Drummers were not searching for the most even distribution. They were searching for what felt right, and across generations what stuck, stuck. That the mathematics and the tradition arrive at the same place is no proof that one explains the other — but it is hard to call it coincidence.",
+          "The three rings above turn independently. It gets interesting where their lengths do not fit into one another: set one track to 8 steps and another to 7, and it takes 56 steps before the combination repeats. That is the same source of richness as in Steve Reich's phase music — two simple things that very nearly, but not quite, keep time together.",
+        ],
+        probeer: [
+          {
+            titel: "Sweep k from 1 to 8 with n = 8",
+            tekst:
+              "At every value a different familiar rhythm appears. None of them is arbitrary; there is always exactly one most even distribution.",
+          },
+          {
+            titel: "Set track 2 to seven steps",
+            tekst:
+              "Seven against eight only realigns after 56 steps. What you hear keeps changing for a minute while nothing about the rules changes at all.",
+          },
+          {
+            titel: "Use the rotation",
+            tekst:
+              "The same pattern, only a different starting point. Rhythmically that is a completely different feel — the same set of onsets, different music.",
+          },
+        ],
+      },
+    },
+  },
 ];
 
 const BY_ID: Record<string, Stuk> = Object.fromEntries(
@@ -529,6 +695,9 @@ export function getStukById(id: string): Stuk | undefined {
 export function getStukBySlug(locale: Locale, slug: string): Stuk | undefined {
   return BY_SLUG[locale][slug];
 }
+
+export const BEELD = STUKKEN.filter((s) => s.soort === "beeld");
+export const KLANK = STUKKEN.filter((s) => s.soort === "klank");
 
 export function buren(id: string): { vorige: Stuk; volgende: Stuk } | null {
   const index = STUKKEN.findIndex((s) => s.id === id);

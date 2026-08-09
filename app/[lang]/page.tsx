@@ -3,9 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Glyph } from "@/components/Glyph";
 import { HeroCanvas } from "@/components/HeroCanvas";
-import { LOCALES, dict, homePath, isLocale, stukPath } from "@/lib/i18n";
+import { LOCALES, dict, homePath, isLocale, stukPath, type Locale } from "@/lib/i18n";
 import { alternates } from "@/lib/paths";
-import { STUKKEN } from "@/lib/stukken";
+import { BEELD, KLANK, STUKKEN, type Stuk } from "@/lib/stukken";
 
 type Props = { params: Promise<{ lang: string }> };
 
@@ -22,6 +22,46 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       languages: alternates(homePath(lang), LOCALES),
     },
   };
+}
+
+function Kaarten({
+  stukken,
+  lang,
+  vanaf,
+}: {
+  stukken: Stuk[];
+  lang: Locale;
+  vanaf: number;
+}) {
+  return (
+    <div className="kaarten">
+      {stukken.map((stuk, i) => {
+        const tekst = stuk.tekst[lang];
+        return (
+          <Link
+            key={stuk.id}
+            href={stukPath(lang, stuk.slug[lang])}
+            className="kaart"
+          >
+            <div className="kaart-top">
+              <span className="kaart-nr">
+                {String(vanaf + i + 1).padStart(2, "0")}
+              </span>
+              <Glyph slug={stuk.id} />
+            </div>
+            <h3 className="kaart-titel">{tekst.titel}</h3>
+            <p className="kaart-samenvatting">{tekst.samenvatting}</p>
+            <div className="kaart-voet">
+              <span>{tekst.kicker}</span>
+              <span className="kaart-pijl" aria-hidden="true">
+                →
+              </span>
+            </div>
+          </Link>
+        );
+      })}
+    </div>
+  );
 }
 
 export default async function Voorpagina({ params }: Props) {
@@ -52,34 +92,11 @@ export default async function Voorpagina({ params }: Props) {
           <p className="eyebrow">{t.indexKop}</p>
           <p className="index-count">{t.indexAantal(STUKKEN.length)}</p>
         </div>
+        <h2 className="groep-kop">{t.groepBeeld}</h2>
+        <Kaarten stukken={BEELD} lang={lang} vanaf={0} />
 
-        <div className="kaarten">
-          {STUKKEN.map((stuk, i) => {
-            const tekst = stuk.tekst[lang];
-            return (
-              <Link
-                key={stuk.id}
-                href={stukPath(lang, stuk.slug[lang])}
-                className="kaart"
-              >
-                <div className="kaart-top">
-                  <span className="kaart-nr">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <Glyph slug={stuk.id} />
-                </div>
-                <h2 className="kaart-titel">{tekst.titel}</h2>
-                <p className="kaart-samenvatting">{tekst.samenvatting}</p>
-                <div className="kaart-voet">
-                  <span>{tekst.kicker}</span>
-                  <span className="kaart-pijl" aria-hidden="true">
-                    →
-                  </span>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+        <h2 className="groep-kop groep-kop-tweede">{t.groepKlank}</h2>
+        <Kaarten stukken={KLANK} lang={lang} vanaf={BEELD.length} />
       </section>
 
       <section className="wrap wrap-narrow blok">

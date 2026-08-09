@@ -5,7 +5,9 @@ import type { SimSpec } from "@/lib/sim";
 import { groeiSpec } from "@/lib/sims/groei";
 import { patroonSpec } from "@/lib/sims/patroon";
 import { regelSpec } from "@/lib/sims/regel";
+import { ritmeSpec } from "@/lib/sims/ritme";
 import { stromingSpec } from "@/lib/sims/stroming";
+import { synchronieSpec } from "@/lib/sims/synchronie";
 import { zandhoopSpec } from "@/lib/sims/zandhoop";
 import { zwermSpec } from "@/lib/sims/zwerm";
 import { SimStage } from "./SimStage";
@@ -22,6 +24,8 @@ const SPECS: Record<string, SimSpec> = {
   stroming: stromingSpec,
   groei: groeiSpec,
   zandhoop: zandhoopSpec,
+  synchronie: synchronieSpec,
+  ritme: ritmeSpec,
 };
 
 export function StukView({

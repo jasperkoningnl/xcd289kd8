@@ -96,6 +96,8 @@ export type Dictionary = {
 
   indexKop: string;
   indexAantal: (n: number) => string;
+  groepBeeld: string;
+  groepKlank: string;
 
   waaromKop: string;
   waaromAlineas: string[];
@@ -110,6 +112,11 @@ export type Dictionary = {
 
   pauze: string;
   doorgaan: string;
+  geluidAan: string;
+  geluidUit: string;
+  klankUitleg: string;
+  kopieerLink: string;
+  linkGekopieerd: string;
   opnieuw: string;
   anderToeval: string;
   bewaarPng: string;
@@ -148,6 +155,8 @@ const NL: Dictionary = {
 
   indexKop: "De stukken",
   indexAantal: (n) => `${n} stuks`,
+  groepBeeld: "Beeld",
+  groepKlank: "Klank",
 
   waaromKop: "Waarom dit de moeite waard is",
   waaromAlineas: [
@@ -166,6 +175,12 @@ const NL: Dictionary = {
 
   pauze: "Pauze",
   doorgaan: "Doorgaan",
+  geluidAan: "Geluid aan",
+  geluidUit: "Geluid uit",
+  klankUitleg:
+    "Dit stuk klinkt. Zet het geluid aan om te horen wat er gebeurt — het beeld werkt ook zonder.",
+  kopieerLink: "Kopieer link",
+  linkGekopieerd: "Gekopieerd",
   opnieuw: "Opnieuw",
   anderToeval: "Ander toeval",
   bewaarPng: "Bewaar PNG",
@@ -205,6 +220,8 @@ const EN: Dictionary = {
 
   indexKop: "The pieces",
   indexAantal: (n) => `${n} in total`,
+  groepBeeld: "Sight",
+  groepKlank: "Sound",
 
   waaromKop: "Why this is worth your time",
   waaromAlineas: [
@@ -223,6 +240,12 @@ const EN: Dictionary = {
 
   pauze: "Pause",
   doorgaan: "Resume",
+  geluidAan: "Sound on",
+  geluidUit: "Sound off",
+  klankUitleg:
+    "This piece makes sound. Turn it on to hear what is happening — the visuals work without it.",
+  kopieerLink: "Copy link",
+  linkGekopieerd: "Copied",
   opnieuw: "Restart",
   anderToeval: "Reseed",
   bewaarPng: "Save PNG",

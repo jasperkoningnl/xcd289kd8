@@ -964,3 +964,44 @@ code {
     font-size: 0.6875rem;
   }
 }
+
+/* ------------------------------------------------------------------ *
+ * Groepen op de voorpagina
+ * ------------------------------------------------------------------ */
+
+.groep-kop {
+  font-family: var(--f-serif);
+  font-weight: 400;
+  font-size: 1.375rem;
+  letter-spacing: -0.01em;
+  color: var(--t2);
+  margin: 2rem 0 0.75rem;
+}
+
+.groep-kop-tweede {
+  margin-top: 3rem;
+}
+
+/* De kaarten hebben een eigen bovenrand nodig nu ze niet meer direct
+   onder de kop met scheidingslijn hangen. */
+.kaarten {
+  border-top: 1px solid var(--line);
+}
+
+/* ------------------------------------------------------------------ *
+ * Geluid
+ * ------------------------------------------------------------------ */
+
+.btn-actief {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.stage-klank {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--t3);
+  border-left: 1px solid var(--line-strong);
+  padding-left: 1rem;
+}

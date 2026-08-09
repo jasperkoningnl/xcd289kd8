@@ -1,3 +1,4 @@
+import type { AudioBus } from "./audio";
 import type { Locale, Text } from "./i18n";
 
 /**
@@ -22,6 +23,12 @@ export type Stage = {
   dpr: number;
   /** Deterministische toevalsgenerator, opnieuw te zaaien bij reset. */
   random: () => number;
+  /**
+   * De geluidsbus, of `null` als de bezoeker geluid uit heeft staan. Een
+   * simulatie moet altijd zonder kunnen: het beeld is nooit afhankelijk van
+   * het geluid.
+   */
+  audio: AudioBus | null;
 };
 
 export type Pointer = {
@@ -77,6 +84,8 @@ export type SimSpec = {
   background?: string;
   /** Aanwijzing bij simulaties die op muis of vinger reageren. */
   pointerHint?: Text;
+  /** Dit stuk maakt geluid; de bediening krijgt dan een geluidsknop. */
+  audio?: boolean;
 };
 
 /* ------------------------------------------------------------------ *

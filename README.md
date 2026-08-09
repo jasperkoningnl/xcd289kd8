@@ -1,9 +1,10 @@
 # Emergentie / Emergence
 
-Zes klassieke modellen uit de complexiteitswetenschap, elk met de volledige
-regel ernaast en genoeg knoppen om het gedrag te laten kantelen. Tweetalig
-(Nederlands en Engels), donker, en volledig client-side: er is geen server,
-geen database en geen externe dienst bij betrokken.
+Acht klassieke modellen uit de complexiteitswetenschap — zes om naar te
+kijken, twee om naar te luisteren — elk met de volledige regel ernaast en
+genoeg knoppen om het gedrag te laten kantelen. Tweetalig (Nederlands en
+Engels), donker, en volledig client-side: er is geen server, geen database en
+geen externe dienst bij betrokken.
 
 | id | /nl/stuk/… | /en/piece/… | Model | Herkomst |
 | --- | --- | --- | --- | --- |
@@ -13,6 +14,11 @@ geen database en geen externe dienst bij betrokken.
 | `stroming` | stroming | flow | Stromingsveld op ruis | Perlin, 1983 |
 | `groei` | groei | growth | L-systemen | Lindenmayer, 1968 |
 | `zandhoop` | zandhoop | sandpile | Abelse zandhoop | Bak, Tang en Wiesenfeld, 1987 |
+| `synchronie` | synchronie | synchrony | Kuramoto-oscillatoren | Kuramoto, 1975 |
+| `ritme` | ritme | rhythm | Euclidische ritmes | Bjorklund 1999 · Toussaint 2005 |
+
+De laatste twee maken geluid. Dat begint nooit vanzelf — de bezoeker zet het
+zelf aan — en het beeld werkt ook zonder.
 
 ## Draaien
 
@@ -42,7 +48,9 @@ components/
   LanguageSwitch.tsx         springt naar dezelfde pagina in de andere taal
 lib/
   sim.ts                     het raamwerk: Sim, SimSpec, Control, ruis, toeval
-  sims/*.ts                  de zes simulaties, los van React
+  audio.ts                   de geluidsbus: synthese, nagalm, toonladder
+  deelbaar.ts                knopstanden lezen uit en schrijven naar de URL
+  sims/*.ts                  de acht simulaties, los van React
   i18n.ts                    talen, padsegmenten, alle vaste teksten
   paths.ts                   pad omrekenen naar een andere taal
   stukken.ts                 de teksten van de stukken, per taal
@@ -52,7 +60,22 @@ lib/
 Een simulatie implementeert `init` en `step` en levert daarnaast een `SimSpec`
 met standaardwaarden en een lijstje bedieningselementen. De `SimStage` regelt de
 rest: resolutie en device pixel ratio, pauzeren buiten beeld, stilstaan bij
-`prefers-reduced-motion`, opnieuw zaaien en het bewaren van een PNG.
+`prefers-reduced-motion`, opnieuw zaaien, het bewaren van een PNG, de deelbare
+adresbalk en — voor stukken met `audio: true` — de levensloop van de
+`AudioContext`.
+
+## Geluid
+
+Twee klokken, en dat is het hele punt. Het tekenwerk loopt op
+`requestAnimationFrame`, dat een paar milliseconden mag schommelen; voor het
+oog onzichtbaar, voor het oor niet. Muzikale gebeurtenissen worden daarom niet
+gespeeld op het moment dat het frame draait, maar met `LOOKAHEAD` vooruit
+ingepland op `AudioContext.currentTime`. De framelus bepaalt alleen hoe ver we
+vooruitkijken, niet wanneer een tik werkelijk klinkt.
+
+Een `AudioContext` mag pas na een klik ontstaan, dus `stage.audio` is `null`
+tot de bezoeker het geluid aanzet. Elke simulatie moet daarop voorbereid zijn:
+het beeld is nooit afhankelijk van het geluid.
 
 Een stuk toevoegen is dus: een bestand in `lib/sims/`, een regel in het register
 in `components/StukView.tsx`, en een item in `lib/stukken.ts` met beide talen.
@@ -78,3 +101,11 @@ productiedomein gebruikt en lokaal `http://localhost:3000`.
 De adressen zonder taalprefix (`/stuk/…`, `/colofon`) blijven bestaan als
 permanente verwijzing naar de Nederlandse versie; dat staat in
 `next.config.ts`.
+
+## Delen
+
+Elke knopstand die van de standaard afwijkt komt in de querystring te staan
+(`?koppeling=1.2&spreiding=0.6`). Wat binnenkomt wordt gecontroleerd tegen de
+bediening zelf: een onbekende parameter of een waarde buiten het bereik wordt
+genegeerd in plaats van doorgegeven. Een onaangeroerd stuk houdt een schoon
+adres.

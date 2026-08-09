@@ -57,6 +57,28 @@ const paden: Record<string, React.ReactNode> = {
       <path d="M20 30l-5-5M20 28l5-5" />
     </>
   ),
+  synchronie: (
+    <>
+      <circle cx="20" cy="20" r="13" />
+      <path d="M20 20l7-7" />
+      <circle cx="20" cy="7" r="1.6" fill="currentColor" stroke="none" />
+      <circle cx="27" cy="10" r="1.6" fill="currentColor" stroke="none" />
+      <circle cx="32" cy="16" r="1.6" fill="currentColor" stroke="none" />
+      <circle cx="8" cy="24" r="1.6" fill="currentColor" stroke="none" />
+      <circle cx="12" cy="30" r="1.6" fill="currentColor" stroke="none" />
+    </>
+  ),
+  ritme: (
+    <>
+      <circle cx="20" cy="20" r="14" />
+      <circle cx="20" cy="20" r="8" />
+      <circle cx="20" cy="6" r="2.4" fill="currentColor" stroke="none" />
+      <circle cx="30" cy="27" r="2.4" fill="currentColor" stroke="none" />
+      <circle cx="10" cy="27" r="2.4" fill="currentColor" stroke="none" />
+      <circle cx="26" cy="14" r="1.8" fill="currentColor" stroke="none" />
+      <circle cx="14" cy="26" r="1.8" fill="currentColor" stroke="none" />
+    </>
+  ),
   zandhoop: (
     <>
       <rect x="6" y="6" width="28" height="28" />

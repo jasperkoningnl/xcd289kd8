@@ -54,6 +54,16 @@ export const COLOFON: Record<Locale, ColofonInhoud> = {
         tekst:
           "Per Bak, Chao Tang en Kurt Wiesenfeld, *Self-organized criticality*, 1987. Het abelse karakter is aangetoond door Deepak Dhar (1990).",
       },
+      {
+        term: "Synchronie",
+        tekst:
+          "Yoshiki Kuramoto, *Self-entrainment of a population of coupled non-linear oscillators*, 1975. Het overzicht van Strogatz, *From Kuramoto to Crawford* (2000), legt uit waarom de drempel er is.",
+      },
+      {
+        term: "Ritme",
+        tekst:
+          "Godfried T. Toussaint, *The Euclidean Algorithm Generates Traditional Musical Rhythms*, 2005. Het onderliggende algoritme is van E. Bjorklund (1999), geschreven voor pulstiming in een deeltjesversneller.",
+      },
     ],
     techniekKop: "Techniek",
     techniek: [
@@ -65,6 +75,16 @@ export const COLOFON: Record<Locale, ColofonInhoud> = {
         term: "Tekenwerk",
         tekst:
           "Canvas 2D, met de hand geschreven. Geen tekenbibliotheek, geen WebGL.",
+      },
+      {
+        term: "Klank",
+        tekst:
+          "Web Audio API, ook zonder bibliotheek. Elke toon wordt ter plekke gemaakt uit een oscillator; er zijn geen opnames. Het beeld loopt op de framelus, de muziek op de audioklok — anders hoor je het schommelen.",
+      },
+      {
+        term: "Delen",
+        tekst:
+          "Elke stand van de knoppen staat in de adresbalk. Wie een mooie instelling vindt, kan de link doorsturen en de ander ziet precies hetzelfde.",
       },
       {
         term: "Talen",
@@ -84,7 +104,7 @@ export const COLOFON: Record<Locale, ColofonInhoud> = {
       {
         term: "Toegankelijkheid",
         tekst:
-          "Wie in het besturingssysteem minder beweging heeft ingesteld, krijgt de achtergrond stil te zien. Elke simulatie is met de knop *Pauze* stil te zetten.",
+          "Wie in het besturingssysteem minder beweging heeft ingesteld, krijgt de achtergrond stil te zien. Elke simulatie is met de knop *Pauze* stil te zetten. Geluid begint nooit vanzelf: dat gaat pas aan als u erom vraagt, en elk klankstuk werkt ook zonder.",
       },
     ],
   },
@@ -127,6 +147,16 @@ export const COLOFON: Record<Locale, ColofonInhoud> = {
         tekst:
           "Per Bak, Chao Tang and Kurt Wiesenfeld, *Self-organized criticality*, 1987. The abelian property was established by Deepak Dhar (1990).",
       },
+      {
+        term: "Synchrony",
+        tekst:
+          "Yoshiki Kuramoto, *Self-entrainment of a population of coupled non-linear oscillators*, 1975. Strogatz's survey *From Kuramoto to Crawford* (2000) explains where the threshold comes from.",
+      },
+      {
+        term: "Rhythm",
+        tekst:
+          "Godfried T. Toussaint, *The Euclidean Algorithm Generates Traditional Musical Rhythms*, 2005. The underlying algorithm is due to E. Bjorklund (1999), written for pulse timing in a particle accelerator.",
+      },
     ],
     techniekKop: "Technical notes",
     techniek: [
@@ -137,6 +167,16 @@ export const COLOFON: Record<Locale, ColofonInhoud> = {
       {
         term: "Drawing",
         tekst: "Canvas 2D, written by hand. No drawing library, no WebGL.",
+      },
+      {
+        term: "Sound",
+        tekst:
+          "Web Audio API, again with no library. Every tone is synthesised on the spot from an oscillator; there are no recordings. The visuals run on the frame loop, the music on the audio clock — otherwise you would hear it wobble.",
+      },
+      {
+        term: "Sharing",
+        tekst:
+          "Every position of the dials lives in the address bar. Find a setting you like and the link will show someone else exactly the same thing.",
       },
       {
         term: "Languages",
@@ -156,7 +196,7 @@ export const COLOFON: Record<Locale, ColofonInhoud> = {
       {
         term: "Accessibility",
         tekst:
-          "Anyone who has asked their system for reduced motion gets the background standing still. Every simulation can be halted with the *Pause* button.",
+          "Anyone who has asked their system for reduced motion gets the background standing still. Every simulation can be halted with the *Pause* button. Sound never starts on its own: it plays only once you ask for it, and every sound piece works without it.",
       },
     ],
   },
