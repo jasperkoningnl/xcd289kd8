@@ -14,6 +14,32 @@ import {
 import { leesParams, schrijfParams } from "@/lib/deelbaar";
 import { Controls } from "./Controls";
 
+function Luidspreker({ aan }: { aan: boolean }) {
+  return (
+    <svg
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M4 9.5h3.5L12 5.5v13L7.5 14.5H4z" />
+      {aan ? (
+        <>
+          <path d="M15.5 9.5a4 4 0 0 1 0 5" />
+          <path d="M18 7a7.5 7.5 0 0 1 0 10" />
+        </>
+      ) : (
+        <path d="M16 9.5l5 5M21 9.5l-5 5" />
+      )}
+    </svg>
+  );
+}
+
 type Props = {
   spec: SimSpec;
   /** Verhouding breedte : hoogte van het canvas. */
@@ -46,6 +72,7 @@ export function SimStage({ spec, aspect = 16 / 9, title, locale }: Props) {
   const [visible, setVisible] = useState(false);
   const [soundOn, setSoundOn] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [volume, setVolume] = useState(0.85);
 
   paramsRef.current = params;
 
@@ -194,9 +221,10 @@ export function SimStage({ spec, aspect = 16 / 9, title, locale }: Props) {
       busRef.current = new AudioBus();
       if (stageRef.current) stageRef.current.audio = busRef.current;
     }
+    busRef.current.setVolume(volume);
     await busRef.current.resume();
     setSoundOn(true);
-  }, [soundOn, spec.audio]);
+  }, [soundOn, spec.audio, volume]);
 
   // Zwijgen zodra het stuk gepauzeerd of uit beeld is.
   useEffect(() => {
@@ -326,16 +354,6 @@ export function SimStage({ spec, aspect = 16 / 9, title, locale }: Props) {
           >
             {running ? t.pauze : t.doorgaan}
           </button>
-          {spec.audio ? (
-            <button
-              type="button"
-              className={soundOn ? "btn btn-actief" : "btn"}
-              onClick={() => void toggleSound()}
-              aria-pressed={soundOn}
-            >
-              {soundOn ? t.geluidUit : t.geluidAan}
-            </button>
-          ) : null}
           <button type="button" className="btn" onClick={reset}>
             {t.opnieuw}
           </button>
@@ -354,8 +372,39 @@ export function SimStage({ spec, aspect = 16 / 9, title, locale }: Props) {
         ) : null}
       </div>
 
-      {spec.audio && !soundOn ? (
-        <p className="stage-klank">{t.klankUitleg}</p>
+      {spec.audio ? (
+        <div className="klankbalk" data-aan={soundOn ? "true" : undefined}>
+          <button
+            type="button"
+            className={soundOn ? "klankknop klankknop-aan" : "klankknop"}
+            onClick={() => void toggleSound()}
+            aria-pressed={soundOn}
+          >
+            <Luidspreker aan={soundOn} />
+            {soundOn ? t.geluidUit : t.geluidAan}
+          </button>
+
+          {soundOn ? (
+            <label className="klankvolume">
+              <span className="control-label">{t.volume}</span>
+              <input
+                type="range"
+                className="control-range"
+                min={0}
+                max={1}
+                step={0.01}
+                value={volume}
+                onChange={(event) => {
+                  const v = Number(event.target.value);
+                  setVolume(v);
+                  busRef.current?.setVolume(v);
+                }}
+              />
+            </label>
+          ) : (
+            <p className="klanktekst">{t.klankUitleg}</p>
+          )}
+        </div>
       ) : null}
 
       <Controls

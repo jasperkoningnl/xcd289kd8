@@ -135,11 +135,10 @@ class Ritme implements Sim {
 
   step(stage: Stage, params: Params, dt: number, pointer: Pointer | null): void {
     const bpm = num(params, "tempo", 104);
-    const geluid = bool(params, "geluid", true);
 
     // Eén stap is een zestiende; vier stappen is een tel.
     const stapDuur = 60 / bpm / 4;
-    const audio = geluid ? stage.audio : null;
+    const audio = stage.audio;
 
     if (audio) {
       if (!this.gestart) {
@@ -186,7 +185,7 @@ class Ritme implements Sim {
     if (spoor.stem === "bel") {
       audio.note(tijd, spoor.freq, {
         decay: 1.1,
-        gain: 0.16,
+        gain: 0.3,
         type: "sine",
         partial: 0.18,
         send: 0.45,
@@ -194,13 +193,13 @@ class Ritme implements Sim {
     } else if (spoor.stem === "hout") {
       audio.note(tijd, spoor.freq, {
         decay: 0.22,
-        gain: 0.2,
+        gain: 0.34,
         type: "triangle",
         partial: 0.3,
         send: 0.2,
       });
     } else {
-      audio.hit(tijd, { decay: 0.05, gain: 0.12, highpass: 4200, send: 0.12 });
+      audio.hit(tijd, { decay: 0.05, gain: 0.2, highpass: 4200, send: 0.12 });
     }
   }
 
@@ -366,7 +365,6 @@ export const ritmeSpec: SimSpec = {
     pulsen3: 4,
     stappen3: 16,
     draai3: 0,
-    geluid: true,
     patroon: true,
   },
   controls: [
@@ -404,7 +402,6 @@ export const ritmeSpec: SimSpec = {
     ...spoorControls(0),
     ...spoorControls(1),
     ...spoorControls(2),
-    { kind: "toggle", key: "geluid", label: { nl: "Klank", en: "Sound" } },
     {
       kind: "toggle",
       key: "patroon",

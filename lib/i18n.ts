@@ -115,6 +115,7 @@ export type Dictionary = {
   geluidAan: string;
   geluidUit: string;
   klankUitleg: string;
+  volume: string;
   kopieerLink: string;
   linkGekopieerd: string;
   opnieuw: string;
@@ -178,7 +179,8 @@ const NL: Dictionary = {
   geluidAan: "Geluid aan",
   geluidUit: "Geluid uit",
   klankUitleg:
-    "Dit stuk klinkt. Zet het geluid aan om te horen wat er gebeurt — het beeld werkt ook zonder.",
+    "Dit stuk is bedoeld om naar te luisteren. Het beeld werkt ook zonder.",
+  volume: "Volume",
   kopieerLink: "Kopieer link",
   linkGekopieerd: "Gekopieerd",
   opnieuw: "Opnieuw",
@@ -243,7 +245,8 @@ const EN: Dictionary = {
   geluidAan: "Sound on",
   geluidUit: "Sound off",
   klankUitleg:
-    "This piece makes sound. Turn it on to hear what is happening — the visuals work without it.",
+    "This piece is meant to be listened to. The visuals work without it.",
+  volume: "Volume",
   kopieerLink: "Copy link",
   linkGekopieerd: "Copied",
   opnieuw: "Restart",

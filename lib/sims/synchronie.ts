@@ -81,7 +81,6 @@ class Synchronie implements Sim {
 
   step(stage: Stage, params: Params, dt: number, pointer: Pointer | null): void {
     const coupling = num(params, "koppeling", 4);
-    const geluid = bool(params, "geluid", true);
     const grondtoon = num(params, "grondtoon", 220);
 
     const n = this.osc.length;
@@ -99,14 +98,14 @@ class Synchronie implements Sim {
     this.psi = Math.atan2(sumSin, sumCos);
 
     const pull = coupling * this.r;
-    const audio = geluid ? stage.audio : null;
+    const audio = stage.audio;
     const when = audio ? audio.now + LOOKAHEAD : 0;
 
     // Bij honderden gelijktijdige tikken wordt het een klap in plaats van een
     // akkoord; daarom een plafond per frame.
     let voices = 0;
     const maxVoices = 20;
-    const gain = 0.34 / Math.sqrt(n);
+    const gain = 0.42 / Math.pow(n, 0.4);
 
     for (let i = 0; i < n; i++) {
       const o = this.osc[i];
@@ -244,7 +243,6 @@ export const synchronieSpec: SimSpec = {
     spreiding: 0.25,
     tempo: 1.6,
     grondtoon: 220,
-    geluid: true,
     meter: true,
   },
   controls: [
@@ -295,7 +293,6 @@ export const synchronieSpec: SimSpec = {
       step: 10,
       format: (v) => `${v} Hz`,
     },
-    { kind: "toggle", key: "geluid", label: { nl: "Klank", en: "Sound" } },
     { kind: "toggle", key: "meter", label: { nl: "Fasecirkel", en: "Phase circle" } },
   ],
 };

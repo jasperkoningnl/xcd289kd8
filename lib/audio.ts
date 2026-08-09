@@ -38,8 +38,20 @@ export class AudioBus {
     this.ctx = new AudioContext();
 
     this.master = this.ctx.createGain();
-    this.master.gain.value = 0.7;
-    this.master.connect(this.ctx.destination);
+    this.master.gain.value = 0.85;
+
+    // Een milde compressor als vangnet. Bij synchronie vallen er soms twintig
+    // stemmen precies samen; zonder deze zou dat vervormen, en met alleen een
+    // lage grondsterkte zou de rest onhoorbaar zijn.
+    const limiter = this.ctx.createDynamicsCompressor();
+    limiter.threshold.value = -12;
+    limiter.knee.value = 12;
+    limiter.ratio.value = 6;
+    limiter.attack.value = 0.004;
+    limiter.release.value = 0.2;
+
+    this.master.connect(limiter);
+    limiter.connect(this.ctx.destination);
 
     this.dry = this.ctx.createGain();
     this.dry.gain.value = 1;

@@ -1005,3 +1005,78 @@ code {
   border-left: 1px solid var(--line-strong);
   padding-left: 1rem;
 }
+
+/* ------------------------------------------------------------------ *
+ * Geluidsbalk
+ * ------------------------------------------------------------------ */
+
+.klankbalk {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  background: rgba(233, 162, 59, 0.07);
+}
+
+/* Zodra het geluid aanstaat hoeft het blok niet meer te roepen. */
+.klankbalk[data-aan] {
+  border-color: var(--line-strong);
+  background: var(--bg-raised);
+}
+
+.klankknop {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--f-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  flex: none;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.klankknop:hover {
+  background: #f2b45c;
+  border-color: #f2b45c;
+}
+
+.klankknop-aan {
+  background: transparent;
+  color: var(--t1);
+  border-color: var(--line-strong);
+}
+
+.klankknop-aan:hover {
+  background: var(--bg);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.klanktekst {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--t2);
+}
+
+.klankvolume {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1 1 12rem;
+  min-width: 10rem;
+}
+
+.klankvolume .control-range {
+  flex: 1;
+}
